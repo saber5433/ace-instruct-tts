@@ -1,0 +1,2357 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1">
+
+    <meta
+        name="robots"
+        content="noindex, nofollow, noarchive">
+
+    <meta
+        name="referrer"
+        content="no-referrer">
+
+    <meta
+        name="description"
+        content="Anonymous supplementary audio samples for instruction-guided zero-shot speech synthesis.">
+
+    <title>Self-Rewarding GRPO for Instruction-Guided Zero-Shot Speech Synthesis</title>
+
+    <style>
+    
+:root {
+    --ink: #244b50;
+    --paper: #f3f7f7;
+    --line: #b9cdcd;
+    --accent: #936d3e;
+    --text: #111827;
+    --muted: #606b76;
+    --white: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    color-scheme: light;
+}
+
+body {
+    margin: 0;
+    background: var(--white);
+    color: var(--text);
+    font-family:
+        system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", "Noto Sans CJK SC", "Microsoft YaHei",
+        sans-serif;
+    line-height: 1.65;
+}
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 72px 24px 60px;
+}
+
+/* ================= Paper header ================= */
+
+.paper-header {
+    text-align: center;
+    margin: 0 auto 54px;
+}
+
+.paper-title {
+    max-width: 1140px;
+    margin: 0 auto;
+    color: var(--text);
+    font-size: clamp(30px, 3.4vw, 44px);
+    font-weight: 750;
+    line-height: 1.22;
+    letter-spacing: -0.025em;
+    overflow-wrap: break-word;
+    text-wrap: balance;
+}
+
+.paper-authors {
+    margin: 28px 0 0;
+    color: #374151;
+    font-size: 19px;
+    font-weight: 500;
+}
+
+.review-notice {
+    margin: 12px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.paper-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.paper-link {
+    display: inline-block;
+    padding: 7px 18px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--white);
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.paper-link:hover {
+    background: var(--paper);
+}
+
+/* ================= Abstract ================= */
+
+.abstract-section {
+    max-width: 960px;
+    margin: 0 auto 56px;
+    scroll-margin-top: 24px;
+}
+
+.section-title {
+    color: var(--text);
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    margin: 0 0 18px;
+}
+
+.abstract-body {
+    color: #202938;
+    font-size: 17px;
+    line-height: 1.85;
+    text-align: left;
+    overflow-wrap: break-word;
+}
+
+.abstract-body p {
+    margin: 0 0 16px;
+}
+
+.abstract-body p:last-child {
+    margin-bottom: 0;
+}
+
+/* ================= Audio introduction ================= */
+
+.audio-intro {
+    border-top: 1px solid #e5e7eb;
+    padding-top: 34px;
+    scroll-margin-top: 24px;
+}
+
+.description {
+    color: var(--muted);
+    font-size: 16px;
+    margin: 0 0 16px;
+}
+
+.notice {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 14px;
+}
+
+.listening-note {
+    margin: 12px 0 0;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.sample-navigation {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 22px 0 28px;
+}
+
+.sample-navigation a {
+    color: var(--ink);
+    text-decoration: none;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 13px;
+}
+
+.sample-navigation a:hover {
+    background: var(--paper);
+}
+
+/* ================= Sample cards ================= */
+
+.sample {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    scroll-margin-top: 20px;
+    box-shadow: 0 3px 14px rgba(17, 24, 39, 0.035);
+}
+
+.sample-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+    padding: 14px 20px;
+    background: var(--ink);
+    color: var(--white);
+}
+
+.sample-header h3 {
+    font-size: 18px;
+    margin: 0;
+}
+
+.category {
+    font-size: 13px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    padding: 2px 10px;
+}
+
+.sample-body {
+    padding: 18px 20px 20px;
+}
+
+.text-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.text-block {
+    background: var(--paper);
+    border-radius: 8px;
+    padding: 12px 14px;
+    min-width: 0;
+}
+
+.label {
+    display: block;
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 5px;
+}
+
+.primary-text {
+    margin: 0;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.translation {
+    color: var(--muted);
+    font-size: 14px;
+    margin: 8px 0 0;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.sample-note {
+    font-size: 14px;
+    color: var(--muted);
+    margin: 14px 0 0;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* ================= Audio players ================= */
+
+.audio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.audio-card {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 12px;
+    min-width: 0;
+}
+
+.audio-card h4 {
+    margin: 0 0 10px;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 650;
+    overflow-wrap: anywhere;
+}
+
+audio {
+    width: 100%;
+    display: block;
+}
+
+.download {
+    display: inline-block;
+    color: var(--ink);
+    font-size: 12px;
+    margin-top: 8px;
+}
+
+.unavailable {
+    color: var(--muted);
+    font-size: 13px;
+    margin: 0;
+}
+
+.preview-warning {
+    background: #fff2d6;
+    border: 1px solid #d4ad65;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+/* ================= Footer and accessibility ================= */
+
+footer {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 32px;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 16px;
+}
+
+a:focus-visible,
+audio:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 4px;
+}
+
+/* ================= Mobile ================= */
+
+@media (max-width: 700px) {
+    main {
+        padding: 36px 16px 40px;
+    }
+
+    .paper-header {
+        margin-bottom: 36px;
+    }
+
+    .paper-title {
+        font-size: 30px;
+        line-height: 1.25;
+    }
+
+    .paper-authors {
+        margin-top: 22px;
+        font-size: 17px;
+    }
+
+    .abstract-section {
+        margin-bottom: 36px;
+    }
+
+    .section-title {
+        font-size: 24px;
+    }
+
+    .abstract-body {
+        font-size: 16px;
+        line-height: 1.8;
+    }
+
+    .text-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .audio-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sample-body {
+        padding: 14px;
+    }
+
+    .sample-header {
+        padding: 12px 14px;
+    }
+}
+
+    </style>
+</head>
+
+<body>
+<main>
+
+    <header class="paper-header">
+        <h1 class="paper-title">Self-Rewarding GRPO for Instruction-Guided Zero-Shot Speech Synthesis</h1>
+
+        <p class="paper-authors">Anonymous Authors</p>
+
+        <p class="review-notice">Supplementary material for anonymous review</p>
+
+        <div class="paper-links">
+            <a class="paper-link" href="#abstract">
+                Abstract
+            </a>
+
+            <a class="paper-link" href="#audio-samples">
+                Audio Samples
+            </a>
+        </div>
+    </header>
+
+    <section
+        class="abstract-section"
+        id="abstract"
+        aria-labelledby="abstract-title">
+
+        <h2 class="section-title" id="abstract-title">
+            Abstract
+        </h2>
+
+        <div class="abstract-body">
+            <p>Following natural-language instructions while preserving an unseen speaker’s identity remains challenging for zero-shot text-to-speech. We present ACE- Instruct-TTS and Self-Rewarding Group Relative Policy Optimization (SR- GRPO), a post-training method that derives instruction rewards from the TTS model itself rather than an external audio understanding model. SR-GRPO uses a frozen supervised fine-tuning (SFT) checkpoint to score the same generated speech tokens with and without the instruction, holding the target text and speaker conditioning fixed. Inspired by conditional pointwise mutual information, the length-normalized log-likelihood ratio provides a continuous measure of rela- tive compatibility with the instruction. We combine this signal with speaker- similarity and duration rewards. We also introduce ACE-Instruct-TTS-Eval-ZH, a 650-sample Chinese benchmark evaluating instruction following, speaker preser- vation, and intelligibility across six categories, including compositional and con- flicting conditions. SR-GRPO improves instruction-following rate from 67.08% to 75.23%, the highest among evaluated systems, and increases mean human-rated instruction-following scores from 3.64 to 3.90. Reward ablations favor the pro- posed likelihood contrast over conditional-only, rank-based, and external binary rewards. Speaker similarity remains above all evaluated external baselines but decreases relative to SFT, while character error rate remains comparable. Beyond this benchmark, SR-GRPO improves the Chinese InstructTTSEval macro-average score from 79.2% to 81.2% and improves joint success across three SpeechEd- itBench tasks under an adapted re-synthesis protocol. On a second backbone, CosyVoice3, SR-GRPO improves instruction-following rate by 5.54 percentage points, with a similar speaker-preservation trade-off. We train instruction follow- ing only in Mandarin and leave multilingual instruction following to future work.</p>
+        </div>
+    </section>
+
+    <section
+        class="audio-intro"
+        id="audio-samples"
+        aria-labelledby="audio-title">
+
+        <h2 class="section-title" id="audio-title">
+            Audio Samples
+        </h2>
+
+    </section>
+
+    
+
+    <nav
+        class="sample-navigation"
+        aria-label="Sample navigation">
+        <a href="#sample-001">Emotion 001</a><a href="#sample-002">Emotion 002</a><a href="#sample-003">Emotion 003</a><a href="#sample-004">Parameter 001</a><a href="#sample-005">Parameter 002</a><a href="#sample-006">Parameter 003</a><a href="#sample-007">Style 001</a><a href="#sample-008">Style 002</a><a href="#sample-009">Style 003</a><a href="#sample-010">Dialect 001</a><a href="#sample-011">Dialect 002</a><a href="#sample-012">Dialect 003</a><a href="#sample-013">Conflict 001</a><a href="#sample-014">Conflict 002</a><a href="#sample-015">Conflict 003</a><a href="#sample-016">Composition 001</a><a href="#sample-017">Composition 002</a><a href="#sample-018">Composition 003</a>
+    </nav>
+
+    
+    <section
+        class="sample"
+        id="sample-001"
+        aria-labelledby="sample-001-title">
+
+        <div class="sample-header">
+            <h3 id="sample-001-title">Emotion 001</h3>
+            <span class="category">Emotion &amp; Tone</span>
+        </div>
+
+        <div class="sample-body">
+            <div class="text-grid">
+                
+    <div class="text-block">
+        <span class="label">Instruction</span>
+        <p class="primary-text" lang="zh">请表现出超级开心和激动，声音要响亮。</p>
+        <p class="translation" lang="en">Speak with overwhelming joy and excitement, and raise your voice.</p>
+    </div>
+    
+                
+    <div class="text-block">
+        <span class="label">Target text</span>
+        <p class="primary-text" lang="zh">哇！这简直是完美的演出！太精彩了！再来一个！再来一个！</p>
+        <p class="translation" lang="en">Wow! That was absolutely perfect! Brilliant! One more! One more!</p>
+    </div>
+    
+            </div>
+
+            
+
+            <div class="audio-grid">
+                
+        <div class="audio-card">
+            <h4>Reference audio</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Emotion 001 — Reference audio">
+                <source
+                    src="audio/emotion_001_ref.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/emotion_001_ref.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-SFT</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Emotion 001 — ACE-Instruct-TTS-SFT">
+                <source
+                    src="audio/emotion_001_sft.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/emotion_001_sft.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-RL</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Emotion 001 — ACE-Instruct-TTS-RL">
+                <source
+                    src="audio/emotion_001_rl.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/emotion_001_rl.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+            </div>
+        </div>
+    </section>
+    
+    <section
+        class="sample"
+        id="sample-002"
+        aria-labelledby="sample-002-title">
+
+        <div class="sample-header">
+            <h3 id="sample-002-title">Emotion 002</h3>
+            <span class="category">Emotion &amp; Tone</span>
+        </div>
+
+        <div class="sample-body">
+            <div class="text-grid">
+                
+    <div class="text-block">
+        <span class="label">Instruction</span>
+        <p class="primary-text" lang="zh">请表现出狂怒和生气，语气要凶狠。</p>
+        <p class="translation" lang="en">Speak with fury and rage, in a menacing tone.</p>
+    </div>
+    
+                
+    <div class="text-block">
+        <span class="label">Target text</span>
+        <p class="primary-text" lang="zh">你居然敢背叛我？我把你当兄弟，你就是这么在背后捅我刀子的？！</p>
+        <p class="translation" lang="en">How dare you betray me? I treated you like a brother, and this is how you stab me in the back?!</p>
+    </div>
+    
+            </div>
+
+            
+
+            <div class="audio-grid">
+                
+        <div class="audio-card">
+            <h4>Reference audio</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Emotion 002 — Reference audio">
+                <source
+                    src="audio/emotion_002_ref.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/emotion_002_ref.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-SFT</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Emotion 002 — ACE-Instruct-TTS-SFT">
+                <source
+                    src="audio/emotion_002_sft.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/emotion_002_sft.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-RL</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Emotion 002 — ACE-Instruct-TTS-RL">
+                <source
+                    src="audio/emotion_002_rl.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/emotion_002_rl.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+            </div>
+        </div>
+    </section>
+    
+    <section
+        class="sample"
+        id="sample-003"
+        aria-labelledby="sample-003-title">
+
+        <div class="sample-header">
+            <h3 id="sample-003-title">Emotion 003</h3>
+            <span class="category">Emotion &amp; Tone</span>
+        </div>
+
+        <div class="sample-body">
+            <div class="text-grid">
+                
+    <div class="text-block">
+        <span class="label">Instruction</span>
+        <p class="primary-text" lang="zh">请用愧疚哀伤的语气，表现出羞愧。</p>
+        <p class="translation" lang="en">Speak in a remorseful, sorrowful tone and sound ashamed.</p>
+    </div>
+    
+                
+    <div class="text-block">
+        <span class="label">Target text</span>
+        <p class="primary-text" lang="zh">对不起，都是我的错，是我一时糊涂才做出了这种事，我真的没脸见你了。</p>
+        <p class="translation" lang="en">I’m sorry. It’s all my fault. I acted foolishly and did this terrible thing. I’m truly ashamed to face you.</p>
+    </div>
+    
+            </div>
+
+            
+
+            <div class="audio-grid">
+                
+        <div class="audio-card">
+            <h4>Reference audio</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Emotion 003 — Reference audio">
+                <source
+                    src="audio/emotion_003_ref.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/emotion_003_ref.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-SFT</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Emotion 003 — ACE-Instruct-TTS-SFT">
+                <source
+                    src="audio/emotion_003_sft.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/emotion_003_sft.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-RL</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Emotion 003 — ACE-Instruct-TTS-RL">
+                <source
+                    src="audio/emotion_003_rl.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/emotion_003_rl.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+            </div>
+        </div>
+    </section>
+    
+    <section
+        class="sample"
+        id="sample-004"
+        aria-labelledby="sample-004-title">
+
+        <div class="sample-header">
+            <h3 id="sample-004-title">Parameter 001</h3>
+            <span class="category">Acoustic Controls</span>
+        </div>
+
+        <div class="sample-body">
+            <div class="text-grid">
+                
+    <div class="text-block">
+        <span class="label">Instruction</span>
+        <p class="primary-text" lang="zh">语速慢一些，方便记录。</p>
+        <p class="translation" lang="en">Speak at a slower pace for easy note-taking.</p>
+    </div>
+    
+                
+    <div class="text-block">
+        <span class="label">Target text</span>
+        <p class="primary-text" lang="zh">请记下这个电话号码，八七六五四三二一，重复一遍，八七六五四三二一。</p>
+        <p class="translation" lang="en">Please write down this phone number, eight seven six five four three two one. Repeat it: eight seven six five four three two one.</p>
+    </div>
+    
+            </div>
+
+            
+
+            <div class="audio-grid">
+                
+        <div class="audio-card">
+            <h4>Reference audio</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Parameter 001 — Reference audio">
+                <source
+                    src="audio/parameter_001_ref.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/parameter_001_ref.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-SFT</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Parameter 001 — ACE-Instruct-TTS-SFT">
+                <source
+                    src="audio/parameter_001_sft.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/parameter_001_sft.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-RL</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Parameter 001 — ACE-Instruct-TTS-RL">
+                <source
+                    src="audio/parameter_001_rl.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/parameter_001_rl.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+            </div>
+        </div>
+    </section>
+    
+    <section
+        class="sample"
+        id="sample-005"
+        aria-labelledby="sample-005-title">
+
+        <div class="sample-header">
+            <h3 id="sample-005-title">Parameter 002</h3>
+            <span class="category">Acoustic Controls</span>
+        </div>
+
+        <div class="sample-body">
+            <div class="text-grid">
+                
+    <div class="text-block">
+        <span class="label">Instruction</span>
+        <p class="primary-text" lang="zh">请用低沉的声音读出这段旁白。</p>
+        <p class="translation" lang="en">Read this narration in a deep voice.</p>
+    </div>
+    
+                
+    <div class="text-block">
+        <span class="label">Target text</span>
+        <p class="primary-text" lang="zh">夜幕降临，这座城市露出了它狰狞的一面，罪恶在滋生。</p>
+        <p class="translation" lang="en">Night falls, and the city reveals its menacing side, where evil grows.</p>
+    </div>
+    
+            </div>
+
+            
+
+            <div class="audio-grid">
+                
+        <div class="audio-card">
+            <h4>Reference audio</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Parameter 002 — Reference audio">
+                <source
+                    src="audio/parameter_002_ref.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/parameter_002_ref.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-SFT</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Parameter 002 — ACE-Instruct-TTS-SFT">
+                <source
+                    src="audio/parameter_002_sft.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/parameter_002_sft.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-RL</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Parameter 002 — ACE-Instruct-TTS-RL">
+                <source
+                    src="audio/parameter_002_rl.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/parameter_002_rl.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+            </div>
+        </div>
+    </section>
+    
+    <section
+        class="sample"
+        id="sample-006"
+        aria-labelledby="sample-006-title">
+
+        <div class="sample-header">
+            <h3 id="sample-006-title">Parameter 003</h3>
+            <span class="category">Acoustic Controls</span>
+        </div>
+
+        <div class="sample-body">
+            <div class="text-grid">
+                
+    <div class="text-block">
+        <span class="label">Instruction</span>
+        <p class="primary-text" lang="zh">音量调低，表现出虚弱。</p>
+        <p class="translation" lang="en">Lower your volume and sound weak.</p>
+    </div>
+    
+                
+    <div class="text-block">
+        <span class="label">Target text</span>
+        <p class="primary-text" lang="zh">医生，我感觉头好晕，浑身没力气，我是不是病了？</p>
+        <p class="translation" lang="en">Doctor, I feel dizzy and completely exhausted. Am I sick?</p>
+    </div>
+    
+            </div>
+
+            
+
+            <div class="audio-grid">
+                
+        <div class="audio-card">
+            <h4>Reference audio</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Parameter 003 — Reference audio">
+                <source
+                    src="audio/parameter_003_ref.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/parameter_003_ref.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-SFT</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Parameter 003 — ACE-Instruct-TTS-SFT">
+                <source
+                    src="audio/parameter_003_sft.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/parameter_003_sft.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-RL</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Parameter 003 — ACE-Instruct-TTS-RL">
+                <source
+                    src="audio/parameter_003_rl.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/parameter_003_rl.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+            </div>
+        </div>
+    </section>
+    
+    <section
+        class="sample"
+        id="sample-007"
+        aria-labelledby="sample-007-title">
+
+        <div class="sample-header">
+            <h3 id="sample-007-title">Style 001</h3>
+            <span class="category">Speaking Style</span>
+        </div>
+
+        <div class="sample-body">
+            <div class="text-grid">
+                
+    <div class="text-block">
+        <span class="label">Instruction</span>
+        <p class="primary-text" lang="zh">请用自然对话的风格，带着一点散漫的感觉。</p>
+        <p class="translation" lang="en">Speak in a natural conversational style with a laid-back vibe.</p>
+    </div>
+    
+                
+    <div class="text-block">
+        <span class="label">Target text</span>
+        <p class="primary-text" lang="zh">吃完饭去公园溜达一圈吧，吹吹晚风，消消食，反正也没什么急事。</p>
+        <p class="translation" lang="en">Let’s take a stroll in the park after dinner, enjoy the evening breeze and aid digestion. We don’t have anything urgent anyway.</p>
+    </div>
+    
+            </div>
+
+            
+
+            <div class="audio-grid">
+                
+        <div class="audio-card">
+            <h4>Reference audio</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Style 001 — Reference audio">
+                <source
+                    src="audio/style_001_ref.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/style_001_ref.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-SFT</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Style 001 — ACE-Instruct-TTS-SFT">
+                <source
+                    src="audio/style_001_sft.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/style_001_sft.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-RL</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Style 001 — ACE-Instruct-TTS-RL">
+                <source
+                    src="audio/style_001_rl.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/style_001_rl.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+            </div>
+        </div>
+    </section>
+    
+    <section
+        class="sample"
+        id="sample-008"
+        aria-labelledby="sample-008-title">
+
+        <div class="sample-header">
+            <h3 id="sample-008-title">Style 002</h3>
+            <span class="category">Speaking Style</span>
+        </div>
+
+        <div class="sample-body">
+            <div class="text-grid">
+                
+    <div class="text-block">
+        <span class="label">Instruction</span>
+        <p class="primary-text" lang="zh">请用社交亲昵的口吻，轻声细语地表达关心。</p>
+        <p class="translation" lang="en">Speak in an affectionate, gentle tone and express your concern softly.</p>
+    </div>
+    
+                
+    <div class="text-block">
+        <span class="label">Target text</span>
+        <p class="primary-text" lang="zh">是不是累坏了？快躺下休息会儿，我给你揉揉肩，放松一下。</p>
+        <p class="translation" lang="en">Are you worn out? Lie down and rest for a while. Let me rub your shoulders to help you relax.</p>
+    </div>
+    
+            </div>
+
+            
+
+            <div class="audio-grid">
+                
+        <div class="audio-card">
+            <h4>Reference audio</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Style 002 — Reference audio">
+                <source
+                    src="audio/style_002_ref.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/style_002_ref.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-SFT</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Style 002 — ACE-Instruct-TTS-SFT">
+                <source
+                    src="audio/style_002_sft.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/style_002_sft.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-RL</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Style 002 — ACE-Instruct-TTS-RL">
+                <source
+                    src="audio/style_002_rl.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/style_002_rl.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+            </div>
+        </div>
+    </section>
+    
+    <section
+        class="sample"
+        id="sample-009"
+        aria-labelledby="sample-009-title">
+
+        <div class="sample-header">
+            <h3 id="sample-009-title">Style 003</h3>
+            <span class="category">Speaking Style</span>
+        </div>
+
+        <div class="sample-body">
+            <div class="text-grid">
+                
+    <div class="text-block">
+        <span class="label">Instruction</span>
+        <p class="primary-text" lang="zh">请用绘本故事的风格，生动地进行角色塑造。</p>
+        <p class="translation" lang="en">Read in a picture-book story style with vivid character portrayal.</p>
+    </div>
+    
+                
+    <div class="text-block">
+        <span class="label">Target text</span>
+        <p class="primary-text" lang="zh">小兔子瞪大了眼睛，竖起耳朵说：“大灰狼来啦！大家快跑呀，快躲起来！”</p>
+        <p class="translation" lang="en">The little rabbit widened its eyes, pricked up its ears and shouted: The big bad wolf is coming! Run everyone! Hide quickly!</p>
+    </div>
+    
+            </div>
+
+            
+
+            <div class="audio-grid">
+                
+        <div class="audio-card">
+            <h4>Reference audio</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Style 003 — Reference audio">
+                <source
+                    src="audio/style_003_ref.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/style_003_ref.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-SFT</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Style 003 — ACE-Instruct-TTS-SFT">
+                <source
+                    src="audio/style_003_sft.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/style_003_sft.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-RL</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Style 003 — ACE-Instruct-TTS-RL">
+                <source
+                    src="audio/style_003_rl.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/style_003_rl.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+            </div>
+        </div>
+    </section>
+    
+    <section
+        class="sample"
+        id="sample-010"
+        aria-labelledby="sample-010-title">
+
+        <div class="sample-header">
+            <h3 id="sample-010-title">Dialect 001</h3>
+            <span class="category">Dialects &amp; Accents</span>
+        </div>
+
+        <div class="sample-body">
+            <div class="text-grid">
+                
+    <div class="text-block">
+        <span class="label">Instruction</span>
+        <p class="primary-text" lang="zh">用四川话读一下这段关于大熊猫的文本。</p>
+        <p class="translation" lang="en">Read this text about giant pandas in Sichuan dialect.</p>
+    </div>
+    
+                
+    <div class="text-block">
+        <span class="label">Target text</span>
+        <p class="primary-text" lang="zh">去基地看大熊猫，那些滚滚圆嘟嘟的，吃竹子的样子简直萌翻了，太可爱了。</p>
+        <p class="translation" lang="en">Go to the base to see the giant pandas. Those round and fluffy cuties look absolutely adorable when they eat bamboo. They are so lovely.</p>
+    </div>
+    
+            </div>
+
+            
+
+            <div class="audio-grid">
+                
+        <div class="audio-card">
+            <h4>Reference audio</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Dialect 001 — Reference audio">
+                <source
+                    src="audio/dialect_001_ref.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/dialect_001_ref.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-SFT</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Dialect 001 — ACE-Instruct-TTS-SFT">
+                <source
+                    src="audio/dialect_001_sft.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/dialect_001_sft.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-RL</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Dialect 001 — ACE-Instruct-TTS-RL">
+                <source
+                    src="audio/dialect_001_rl.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/dialect_001_rl.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+            </div>
+        </div>
+    </section>
+    
+    <section
+        class="sample"
+        id="sample-011"
+        aria-labelledby="sample-011-title">
+
+        <div class="sample-header">
+            <h3 id="sample-011-title">Dialect 002</h3>
+            <span class="category">Dialects &amp; Accents</span>
+        </div>
+
+        <div class="sample-body">
+            <div class="text-grid">
+                
+    <div class="text-block">
+        <span class="label">Instruction</span>
+        <p class="primary-text" lang="zh">请用广东话合成一段关于早茶的描述。</p>
+        <p class="translation" lang="en">Read this passage about morning tea in Cantonese.</p>
+    </div>
+    
+                
+    <div class="text-block">
+        <span class="label">Target text</span>
+        <p class="primary-text" lang="zh">得闲饮茶啦，叫上一笼虾饺、凤爪、排骨，叹一杯普洱，慢慢倾计，几写意啊。</p>
+        <p class="translation" lang="en">Let&#x27;s grab some dim sum when we&#x27;re free. Order a basket of shrimp dumplings, chicken feet and spareribs, sip a cup of Pu&#x27;er tea and chat slowly. How relaxing it is.</p>
+    </div>
+    
+            </div>
+
+            
+
+            <div class="audio-grid">
+                
+        <div class="audio-card">
+            <h4>Reference audio</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Dialect 002 — Reference audio">
+                <source
+                    src="audio/dialect_002_ref.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/dialect_002_ref.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-SFT</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Dialect 002 — ACE-Instruct-TTS-SFT">
+                <source
+                    src="audio/dialect_002_sft.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/dialect_002_sft.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-RL</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Dialect 002 — ACE-Instruct-TTS-RL">
+                <source
+                    src="audio/dialect_002_rl.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/dialect_002_rl.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+            </div>
+        </div>
+    </section>
+    
+    <section
+        class="sample"
+        id="sample-012"
+        aria-labelledby="sample-012-title">
+
+        <div class="sample-header">
+            <h3 id="sample-012-title">Dialect 003</h3>
+            <span class="category">Dialects &amp; Accents</span>
+        </div>
+
+        <div class="sample-body">
+            <div class="text-grid">
+                
+    <div class="text-block">
+        <span class="label">Instruction</span>
+        <p class="primary-text" lang="zh">合成一段湖南话，描述橘子洲。</p>
+        <p class="translation" lang="en">Synthesize a description of Orange Island in authentic Hunan dialect.</p>
+    </div>
+    
+                
+    <div class="text-block">
+        <span class="label">Target text</span>
+        <p class="primary-text" lang="zh">橘子洲头看烟花，那是长沙的一大盛景，漫天花火，映照湘江，美不胜收。</p>
+        <p class="translation" lang="en">Watching fireworks at Orange Island Head is one of Changsha’s spectacular sights. Fireworks bloom all over the sky, reflecting on the Xiangjiang River. The view is simply breathtaking.</p>
+    </div>
+    
+            </div>
+
+            
+
+            <div class="audio-grid">
+                
+        <div class="audio-card">
+            <h4>Reference audio</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Dialect 003 — Reference audio">
+                <source
+                    src="audio/dialect_003_ref.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/dialect_003_ref.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-SFT</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Dialect 003 — ACE-Instruct-TTS-SFT">
+                <source
+                    src="audio/dialect_003_sft.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/dialect_003_sft.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-RL</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Dialect 003 — ACE-Instruct-TTS-RL">
+                <source
+                    src="audio/dialect_003_rl.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/dialect_003_rl.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+            </div>
+        </div>
+    </section>
+    
+    <section
+        class="sample"
+        id="sample-013"
+        aria-labelledby="sample-013-title">
+
+        <div class="sample-header">
+            <h3 id="sample-013-title">Conflict 001</h3>
+            <span class="category">Conflicting Conditions</span>
+        </div>
+
+        <div class="sample-body">
+            <div class="text-grid">
+                
+    <div class="text-block">
+        <span class="label">Instruction</span>
+        <p class="primary-text" lang="zh">悲伤的语气，带着明显的哭腔。</p>
+        <p class="translation" lang="en">Speak in a sorrowful tone with obvious sobbing.</p>
+    </div>
+    
+                
+    <div class="text-block">
+        <span class="label">Target text</span>
+        <p class="primary-text" lang="zh">太棒了！我就知道你能行！你简直创造了一个奇迹！我为你感到骄傲！</p>
+        <p class="translation" lang="en">You are amazing! I knew you could do it! You have practically worked a miracle! I’m so proud of you!</p>
+    </div>
+    
+            </div>
+
+            
+
+            <div class="audio-grid">
+                
+        <div class="audio-card">
+            <h4>Reference audio</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Conflict 001 — Reference audio">
+                <source
+                    src="audio/conflict_001_ref.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/conflict_001_ref.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-SFT</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Conflict 001 — ACE-Instruct-TTS-SFT">
+                <source
+                    src="audio/conflict_001_sft.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/conflict_001_sft.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-RL</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Conflict 001 — ACE-Instruct-TTS-RL">
+                <source
+                    src="audio/conflict_001_rl.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/conflict_001_rl.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+            </div>
+        </div>
+    </section>
+    
+    <section
+        class="sample"
+        id="sample-014"
+        aria-labelledby="sample-014-title">
+
+        <div class="sample-header">
+            <h3 id="sample-014-title">Conflict 002</h3>
+            <span class="category">Conflicting Conditions</span>
+        </div>
+
+        <div class="sample-body">
+            <div class="text-grid">
+                
+    <div class="text-block">
+        <span class="label">Instruction</span>
+        <p class="primary-text" lang="zh">用一种惬意、开心的语调。</p>
+        <p class="translation" lang="en">Speak in a pleasant and cheerful tone.</p>
+    </div>
+    
+                
+    <div class="text-block">
+        <span class="label">Target text</span>
+        <p class="primary-text" lang="zh">我的钱包被偷了，里面还有我这个月所有的生活费，真的好绝望。</p>
+        <p class="translation" lang="en">My wallet got stolen. It had all my living expenses for this month inside. I feel so hopeless.</p>
+    </div>
+    
+            </div>
+
+            
+
+            <div class="audio-grid">
+                
+        <div class="audio-card">
+            <h4>Reference audio</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Conflict 002 — Reference audio">
+                <source
+                    src="audio/conflict_002_ref.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/conflict_002_ref.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-SFT</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Conflict 002 — ACE-Instruct-TTS-SFT">
+                <source
+                    src="audio/conflict_002_sft.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/conflict_002_sft.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-RL</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Conflict 002 — ACE-Instruct-TTS-RL">
+                <source
+                    src="audio/conflict_002_rl.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/conflict_002_rl.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+            </div>
+        </div>
+    </section>
+    
+    <section
+        class="sample"
+        id="sample-015"
+        aria-labelledby="sample-015-title">
+
+        <div class="sample-header">
+            <h3 id="sample-015-title">Conflict 003</h3>
+            <span class="category">Conflicting Conditions</span>
+        </div>
+
+        <div class="sample-body">
+            <div class="text-grid">
+                
+    <div class="text-block">
+        <span class="label">Instruction</span>
+        <p class="primary-text" lang="zh">请用满足且愉悦的语气。</p>
+        <p class="translation" lang="en">Speak in a contented and cheerful tone.</p>
+    </div>
+    
+                
+    <div class="text-block">
+        <span class="label">Target text</span>
+        <p class="primary-text" lang="zh">买到了心心念念很久的限量版唱片，拿在手里的感觉真是太棒了。</p>
+        <p class="translation" lang="en">I finally got the limited-edition record I’ve wanted for so long. It feels absolutely wonderful to hold it in my hands.</p>
+    </div>
+    
+            </div>
+
+            
+
+            <div class="audio-grid">
+                
+        <div class="audio-card">
+            <h4>Reference audio</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Conflict 003 — Reference audio">
+                <source
+                    src="audio/conflict_003_ref.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/conflict_003_ref.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-SFT</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Conflict 003 — ACE-Instruct-TTS-SFT">
+                <source
+                    src="audio/conflict_003_sft.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/conflict_003_sft.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-RL</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Conflict 003 — ACE-Instruct-TTS-RL">
+                <source
+                    src="audio/conflict_003_rl.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/conflict_003_rl.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+            </div>
+        </div>
+    </section>
+    
+    <section
+        class="sample"
+        id="sample-016"
+        aria-labelledby="sample-016-title">
+
+        <div class="sample-header">
+            <h3 id="sample-016-title">Composition 001</h3>
+            <span class="category">Compositional Conditions</span>
+        </div>
+
+        <div class="sample-body">
+            <div class="text-grid">
+                
+    <div class="text-block">
+        <span class="label">Instruction</span>
+        <p class="primary-text" lang="zh">用悲伤语气配合低沉的音量。</p>
+        <p class="translation" lang="en">Speak in a sorrowful tone with a low volume.</p>
+    </div>
+    
+                
+    <div class="text-block">
+        <span class="label">Target text</span>
+        <p class="primary-text" lang="zh">对不起……我真的尽力了……可是……还是没能救活它……</p>
+        <p class="translation" lang="en">I&#x27;m sorry... I really tried my best... but... I still couldn&#x27;t save it...</p>
+    </div>
+    
+            </div>
+
+            
+
+            <div class="audio-grid">
+                
+        <div class="audio-card">
+            <h4>Reference audio</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Composition 001 — Reference audio">
+                <source
+                    src="audio/composition_001_ref.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/composition_001_ref.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-SFT</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Composition 001 — ACE-Instruct-TTS-SFT">
+                <source
+                    src="audio/composition_001_sft.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/composition_001_sft.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-RL</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Composition 001 — ACE-Instruct-TTS-RL">
+                <source
+                    src="audio/composition_001_rl.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/composition_001_rl.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+            </div>
+        </div>
+    </section>
+    
+    <section
+        class="sample"
+        id="sample-017"
+        aria-labelledby="sample-017-title">
+
+        <div class="sample-header">
+            <h3 id="sample-017-title">Composition 002</h3>
+            <span class="category">Compositional Conditions</span>
+        </div>
+
+        <div class="sample-body">
+            <div class="text-grid">
+                
+    <div class="text-block">
+        <span class="label">Instruction</span>
+        <p class="primary-text" lang="zh">麻烦带点开心的情绪，语速稍微快一点，像日常闲聊一样读这段话。</p>
+        <p class="translation" lang="en">Read this passage with a happy mood, at a slightly faster speed, like casual daily chat.</p>
+    </div>
+    
+                
+    <div class="text-block">
+        <span class="label">Target text</span>
+        <p class="primary-text" lang="zh">太棒啦！明天周末我们可以去游乐园坐过山车咯！</p>
+        <p class="translation" lang="en">Awesome! Tomorrow is the weekend, we can go to the amusement park and ride the roller coaster!</p>
+    </div>
+    
+            </div>
+
+            
+
+            <div class="audio-grid">
+                
+        <div class="audio-card">
+            <h4>Reference audio</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Composition 002 — Reference audio">
+                <source
+                    src="audio/composition_002_ref.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/composition_002_ref.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-SFT</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Composition 002 — ACE-Instruct-TTS-SFT">
+                <source
+                    src="audio/composition_002_sft.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/composition_002_sft.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-RL</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Composition 002 — ACE-Instruct-TTS-RL">
+                <source
+                    src="audio/composition_002_rl.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/composition_002_rl.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+            </div>
+        </div>
+    </section>
+    
+    <section
+        class="sample"
+        id="sample-018"
+        aria-labelledby="sample-018-title">
+
+        <div class="sample-header">
+            <h3 id="sample-018-title">Composition 003</h3>
+            <span class="category">Compositional Conditions</span>
+        </div>
+
+        <div class="sample-body">
+            <div class="text-grid">
+                
+    <div class="text-block">
+        <span class="label">Instruction</span>
+        <p class="primary-text" lang="zh">麻烦带点四川口音，音量适中，表现出很生气的样子，用发牢骚的风格。</p>
+        <p class="translation" lang="en">Read this text with Sichuan accent, moderate volume, in an angry and complaining style.</p>
+    </div>
+    
+                
+    <div class="text-block">
+        <span class="label">Target text</span>
+        <p class="primary-text" lang="zh">哎呀，气死我了！刚买的自行车停在楼下，一转眼就让人给偷了，哪个缺德鬼干的！</p>
+        <p class="translation" lang="en">Ugh, I’m so mad! I parked my new bike downstairs, and in the blink of an eye it got stolen. What rotten person would do such a thing!</p>
+    </div>
+    
+            </div>
+
+            
+
+            <div class="audio-grid">
+                
+        <div class="audio-card">
+            <h4>Reference audio</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Composition 003 — Reference audio">
+                <source
+                    src="audio/composition_003_ref.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/composition_003_ref.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-SFT</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Composition 003 — ACE-Instruct-TTS-SFT">
+                <source
+                    src="audio/composition_003_sft.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/composition_003_sft.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+        <div class="audio-card">
+            <h4>ACE-Instruct-TTS-RL</h4>
+            
+            <audio
+                controls
+                preload="none"
+                aria-label="Composition 003 — ACE-Instruct-TTS-RL">
+                <source
+                    src="audio/composition_003_rl.wav"
+                    type="audio/wav">
+                Your browser does not support audio playback.
+                Please use the download link below.
+            </audio>
+
+            <a
+                class="download"
+                href="audio/composition_003_rl.wav"
+                download>
+                Open / download audio
+            </a>
+            
+        </div>
+        
+            </div>
+        </div>
+    </section>
+    
+
+    <footer>
+        Static audio supplementary material for anonymous review.
+        This page contains no analytics, external scripts,
+        external fonts, or author contact links.
+    </footer>
+
+</main>
+</body>
+</html>
